@@ -14,11 +14,19 @@ app.use(express.json());
 
 // Database connection
 const db = mysql.createConnection({
-  host: process.env.DB_HOST || 'databasetest.cysrpetj7pax.us-east-1.rds.amazonaws.com',
+  host: process.env.DB_HOST || 'test-db.cpuewkcmib2u.us-east-1.rds.amazonaws.com',
   user: process.env.DB_USER || 'admin',
-  password: process.env.DB_PASSWORD || 'alaadmin',
-  database: process.env.DB_NAME || 'databasetest'
+  password: process.env.DB_PASSWORD || 'adminadmin25',
+  database: process.env.DB_NAME || 'test-db'
 });
+tempConnection.query(`CREATE DATABASE IF NOT EXISTS ${process.env.DB_NAME || 'mydatabase'}`, (err) => {
+  if (err) {
+    console.error('❌ Error creating database:', err);
+    return;
+  }
+  console.log('✅ Database ensured');
+
+  tempConnection.end();
 
 db.connect((err) => {
   if (err) {
@@ -201,4 +209,5 @@ process.on('SIGTERM', () => {
     console.log('HTTP server closed');
     process.exit(0);
   });
+});
 });
