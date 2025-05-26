@@ -11,13 +11,27 @@ const port = process.env.PORT || 3000;
 // Middleware
 app.use(cors());
 app.use(express.json());
+// First connection (without database) to create the database
+const tempConnection = mysql.createConnection({
+  host: process.env.DB_HOST || 'tt.cpuewkcmib2u.us-east-1.rds.amazonaws.com',
+  user: process.env.DB_USER || 'admin',
+  password: process.env.DB_PASSWORD || 'adminadmin25'
+});
 
+tempConnection.query(`CREATE DATABASE IF NOT EXISTS ${process.env.DB_NAME || 'tt'}`, (err) => {
+  if (err) {
+    console.error('❌ Error creating database:', err);
+    return;
+  }
+  console.log('✅ Database ensured');
+
+  tempConnection.end();
 // Database connection
 const db = mysql.createConnection({
-  host: process.env.DB_HOST || 'test-db.cpuewkcmib2u.us-east-1.rds.amazonaws.com',
+  host: process.env.DB_HOST || 'tt.cpuewkcmib2u.us-east-1.rds.amazonaws.com',
   user: process.env.DB_USER || 'admin',
-  password: process.env.DB_PASSWORD || 'adminadmin',
-  database: process.env.DB_NAME || 'test-db'
+  password: process.env.DB_PASSWORD || 'adminadmin25',
+  database: process.env.DB_NAME || 'tt'
 });
 
 db.connect((err) => {
@@ -202,4 +216,4 @@ process.on('SIGTERM', () => {
     process.exit(0);
   });
 });
-
+});
