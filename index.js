@@ -203,10 +203,10 @@ app.delete('/api/users/:id', (req, res) => {
   });
 });
 
-// Start server
-const server = app.listen(port, () => {
+const server = app.listen(port, '0.0.0.0', () => {
   console.log(`Server running on port ${port}`);
 });
+
 
 // Handle graceful shutdown
 process.on('SIGTERM', () => {
